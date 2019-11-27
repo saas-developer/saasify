@@ -4,8 +4,8 @@ import {
 	Route
 } from 'react-router-dom';
 import HomePage from './HomePage';
-import Login from './Login';
 import Register from './account/Register';
+import Login from './account/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
