@@ -3,6 +3,8 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
+// connect to database on startup
+const databaseSetup = require('./db/databaseSetup');
 
 const app = express();
 
