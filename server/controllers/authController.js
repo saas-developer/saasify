@@ -42,7 +42,7 @@ exports.register = async (req, res, next) => {
 			errors: validationErrors
 		};
 
-		res.send(errorObject);
+		res.status(422).send(errorObject);
 
 		return;
 	}
