@@ -41,6 +41,18 @@ if (!User) {
 		})
 	});
 
+
+	userSchema.methods.comparePassword = function(candidatePassword, callback) {
+		bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+			if (err) {
+				callback(err);
+				return;
+			}
+
+			callback(null, isMatch);
+		})
+	}
+
 	User = mongoose.model('User', userSchema);	
 }
 

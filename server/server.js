@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 // connect to database on startup
 const databaseSetup = require('./db/databaseSetup');
+const passport = require('./lib/passport');
 
 const app = express();
 
