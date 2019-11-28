@@ -1,4 +1,6 @@
 const authController = require('./controllers/authController');
+const passport = require('passport');
+const checkAuth = passport.authenticate('jwt', { session: false });
 
 function addRoutes(app) {
 	app.all('*', (req, res, next) => {
@@ -15,6 +17,10 @@ function addRoutes(app) {
 	
 	app.post('/api/register', authController.register);
 	app.post('/api/login', authController.login);
+
+
+	app.get('/api/test-auth', checkAuth , authController.testAuth);
+
 
 }
 
