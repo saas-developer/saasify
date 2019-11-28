@@ -76,8 +76,6 @@ jwtOpts.jwtFromRequest = (req) => {
 jwtOpts.secretOrKey = process.env.JWT_SECRET || 'TEMP_JWT_SECRET';
 
 passport.use(new JwtStrategy(jwtOpts, function(jwtPayload, done) {
-	console.log('jwtPayload ', jwtPayload);
-
 	const userId = jwtPayload._id;
 
     User.findOne({ _id: userId }, function(err, user) {
