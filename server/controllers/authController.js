@@ -273,7 +273,54 @@ exports.resendActivationLink = async (req, res, next) => {
 			error: true
 		})
 	}
- }
+}
+
+exports.resetPasswordLink = async ( req, res, next) => {
+	const {
+		email
+	} = req.body;
+
+	if (!email) {
+		const errorObject = {
+			error: true,
+			errors: [{
+				code: 'VALIDATION_ERROR',
+				message: 'Please specify the email account that needs password reset'
+			}]
+		};
+
+		res.status(422).send(errorObject);
+
+		return;
+	}
+
+	try {
+		const user = await User.findOne({
+			email
+		});
+
+		if (user) {
+			user.resetPasswordToken = uuidv1();
+			user.resetPasswordTokenSentAt = Date.now();
+
+			const savedUser = user.save();
+
+			// Send email now ...
+			
+		}
+
+		return res.send({
+			message: 'Reset Password Link has been sent'
+		})
+
+	} catch (e) {
+		console.log('e ', e);
+		res.status(500).send({
+			error: true
+		})
+	}
+
+}
 
 exports.testAuth = async (req, res, next) => {
 	console.log('req.user ', req.user);

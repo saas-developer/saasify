@@ -14,7 +14,11 @@ if (!User) {
 		activated: { type: Boolean },
 		activationToken: { type: String, unique: true, sparse: true },
 		activationTokenSentAt: { type: Date },
-		activatedAt: { type: Date }
+		activatedAt: { type: Date },
+
+		// Fields related to reset password
+		resetPasswordToken: { type: String, unique: true, sparse: true },
+		resetPasswordTokenSentAt: { type: Date }
 	},
 	{
 		timestamps: true
