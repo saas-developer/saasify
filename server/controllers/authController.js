@@ -1,9 +1,9 @@
 const User = require('../models/User');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const uuidv1 = require('uuid/v1');
 
 exports.register = async (req, res, next) => {
-	console.log('req.body ', req.body);
 	const {
 		email,
 		password
@@ -71,7 +71,10 @@ exports.register = async (req, res, next) => {
 
 		let user = new User({
 			email,
-			password
+			password,
+			activated: false,
+			activationToken: uuidv1(),
+			activationTokenSentAt: Date.now()
 		});
 
 		const savedUser = await user.save();
@@ -79,7 +82,7 @@ exports.register = async (req, res, next) => {
 		console.log('savedUser ', savedUser);
 
 		res.status(200).send({
-			user: savedUser
+			user: User.toClientObject(savedUser)
 		})
 
 	} catch (e) {
