@@ -314,7 +314,7 @@ exports.resetPasswordLink = async ( req, res, next) => {
 			const savedUser = user.save();
 
 			// Send email now ...
-			
+
 		}
 
 		return res.send({
@@ -327,6 +327,58 @@ exports.resetPasswordLink = async ( req, res, next) => {
 			error: true
 		})
 	}
+
+}
+
+exports.resetPassword = async (req, res, next) => {
+	const {
+		resetPasswordToken,
+		password
+	} = req.body;
+
+	const validationErrors = [];
+
+	if (!password || !resetPasswordToken) {
+		validationErrors.push({
+			code: 'VALIDATION_ERROR',
+			field: '',
+			message: 'Sorry, we could not update your password'
+		})
+	}
+
+	if (validationErrors.length) {
+		return res.status(422).send(validationErrors);
+	}
+
+	try {
+		const user = await User.findOne({
+			resetPasswordToken
+		});
+
+		if (!user) {
+			// Ignore ..
+		}
+
+		if (user) {
+			user.password = password;
+			user.resetPasswordToken = undefined;
+
+			const savedUser = await user.save();
+		}
+
+		res.status(200).send({
+			message: 'Your password has been successfully updated. Please go to the Login Page to Sign In again'
+		});
+
+
+	} catch (e) {
+		console.log('e ', e);
+		res.status(500).send({
+			error: true
+		})
+	}
+	
+
 
 }
 

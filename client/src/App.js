@@ -8,6 +8,7 @@ import Register from './account/Register';
 import AccountActivation from './account/AccountActivation';
 import ResendActivationLink from './account/ResendActivationLink';
 import ResetPasswordLink from './account/ResetPasswordLink';
+import ResetPassword from './account/ResetPassword';
 import Login from './account/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
@@ -25,6 +26,7 @@ function App() {
 	  <Route exact path="/account/activate" component={AccountActivation} />
 	  <Route exact path="/account/resend-activation-link" component={ResendActivationLink} />
 	  <Route exact path="/account/reset-password-link" component={ResetPasswordLink} />
+	  <Route exact path="/account/reset-password" component={ResetPassword} />
 
     </div>
   );
