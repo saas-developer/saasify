@@ -167,7 +167,7 @@ exports.login = async (req, res, next) => {
 
 		res.status(200).send({
 			token: jwtToken,
-			user: userObject
+			user: User.toClientObject(user)
 		});
 		return;
 		
