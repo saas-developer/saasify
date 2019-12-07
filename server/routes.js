@@ -20,6 +20,7 @@ function addRoutes(app) {
 	app.post('/api/account-activate', authController.accountActivate);
 	app.post('/api/resend-activation-link', authController.resendActivationLink);
 	app.post('/api/reset-password-link', authController.resetPasswordLink);
+	app.post('/api/reset-password', authController.resetPassword);
 
 	app.get('/api/test-auth', checkAuth , authController.testAuth);
 
