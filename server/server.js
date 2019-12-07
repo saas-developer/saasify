@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const compression = require('compression');
 const bodyParser = require('body-parser');
@@ -17,8 +18,8 @@ app.use(cookieParser());
 
 routes.addRoutes(app);
 
-app.listen(3001, () => {
-	console.log('Express Server started on PORT: ', 3001);
+app.listen(process.env.APP_PORT || 3001, () => {
+	console.log('Express Server started on PORT: ', process.env.APP_PORT || 3001);
 });
 
 process.on('uncaughtException', (error) => {

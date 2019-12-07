@@ -153,7 +153,7 @@ exports.login = async (req, res, next) => {
 			_id: userObject._id
 		}
 
-		const jwtToken = jwt.sign(tokenObject, process.env.JWT_SECRET || 'TEMP_JWT_SECRET', {
+		const jwtToken = jwt.sign(tokenObject, process.env.JWT_SECRET, {
 			expiresIn: 86400 // seconds in a day
 		})
 
