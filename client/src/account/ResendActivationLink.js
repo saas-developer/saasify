@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
+import './account.scss';
 
 class ResendActivationLink extends Component {
 	state = {
@@ -43,31 +45,44 @@ class ResendActivationLink extends Component {
 	render() {
 		return (
 			<div className="container">
-				<h2>Resend Activation Link</h2>
-				<div>
-					<Form>
-					  <Form.Group controlId="formBasicEmail">
-					    <Form.Label>Email address</Form.Label>
-					    <Form.Control
-					    	type="email"
-				    		placeholder="Enter email"
-				    		onChange={this.handleEmailChange}
-				    		value={this.state.email}
-				    	/>
-					    <Form.Text className="text-muted">
-					      This account should already exist in our database.
-					    </Form.Text>
-					  </Form.Group>
+				<div className="form-container">
+					<h2>Resend Activation Link</h2>
+					<div>
+						<Form>
+						  <Form.Group controlId="formBasicEmail">
+						    <Form.Label>Email address</Form.Label>
+						    <Form.Control
+						    	type="email"
+					    		placeholder="Enter email"
+					    		onChange={this.handleEmailChange}
+					    		value={this.state.email}
+					    	/>
+						    <Form.Text className="text-muted">
+						      This account should already exist in our database.
+						    </Form.Text>
+						  </Form.Group>
 
-					  <Button
-					  	variant="primary"
-					  	type="button"
-					  	onClick={this.handleSubmitClick}
-					  >
-					    Submit
-					  </Button>
+						  <Button
+						  	variant="primary"
+						  	type="button"
+						  	onClick={this.handleSubmitClick}
+						  >
+						    Submit
+						  </Button>
 
-					</Form>
+						</Form>
+					</div>
+					<div className="actions-container">
+						<div>
+							<div>Already have an account?</div>
+							<div><Link to="/login">Login</Link></div>
+						</div>
+						<div>
+							<div>Don't have an account?</div>
+							<div><Link to="/register">Register</Link></div>
+						</div>
+						
+					</div>
 				</div>
 			</div>
 		);
