@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
+import './account.scss';
 
 class ResetPassword extends Component {
 	state = {
@@ -57,33 +59,42 @@ class ResetPassword extends Component {
 	render() {
 		return (
 			<div className="container">
-			<h2>Reset Password</h2>
-			<div>
-				<Form>
-				  <Form.Group controlId="formBasicPassword">
-				    <Form.Label>Password</Form.Label>
-				    <Form.Control
-				    	type="password"
-			    		placeholder="Enter password"
-			    		onChange={this.handlePasswordChange}
-			    		value={this.state.password}
-			    	/>
-				    <Form.Text className="text-muted">
-				      Please enter your new password
-				    </Form.Text>
-				  </Form.Group>
+				<div className="form-container">
+					<h2>Reset Password</h2>
+					<div>
+						<Form>
+						  <Form.Group controlId="formBasicPassword">
+						    <Form.Label>Password</Form.Label>
+						    <Form.Control
+						    	type="password"
+					    		placeholder="Enter password"
+					    		onChange={this.handlePasswordChange}
+					    		value={this.state.password}
+					    	/>
+						    <Form.Text className="text-muted">
+						      Please enter your new password
+						    </Form.Text>
+						  </Form.Group>
 
-				  <Button
-				  	variant="primary"
-				  	type="button"
-				  	onClick={this.handleSubmitClick}
-				  >
-				    Submit
-				  </Button>
+						  <Button
+						  	variant="primary"
+						  	type="button"
+						  	onClick={this.handleSubmitClick}
+						  >
+						    Submit
+						  </Button>
 
-				</Form>
+						</Form>
+					</div>
+					<div className="actions-container">
+						<div>
+							<div>Try Login again?</div>
+							<div><Link to="/login">Login</Link></div>
+						</div>
+						
+					</div>
+				</div>
 			</div>
-		</div>
 		);
 	}
 }
