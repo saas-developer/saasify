@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import ListGroup from 'react-bootstrap/ListGroup';
+import { Link } from 'react-router-dom';
 
 export class HomePage extends Component {
-	componentDidMount() {
-		console.log('this.props ', this.props);
-
-		setTimeout(() => {
-			this.props.history.push('/login');
-		}, 5000)
-	}
 	render() {
 		return (
-			<div>This is the HomePage component</div>
+			<div className="container">
+				<div>Welcome Home</div>
+				<ListGroup>
+				  <ListGroup.Item>
+				  	<Link to="register">Register</Link>
+				  </ListGroup.Item>
+				  <ListGroup.Item>
+				  	<Link to="login">Login</Link>
+				  </ListGroup.Item>
+				  <ListGroup.Item>
+				  	<Link to="/account/activate">Activate</Link>
+				  </ListGroup.Item>
+				  <ListGroup.Item>
+				  	<Link to="/account/resend-activation-link">Resend Activation Link</Link>
+				  </ListGroup.Item>
+				  <ListGroup.Item>
+				  	<Link to="/account/reset-password-link">Reset Password Link</Link>
+				  </ListGroup.Item>
+				  <ListGroup.Item>
+				  	<Link to="/account/reset-password">Reset Password</Link>
+				  </ListGroup.Item>
+				</ListGroup>
+			</div>
 		);
 	}
 }
