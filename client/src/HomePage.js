@@ -7,7 +7,7 @@ export class HomePage extends Component {
 	render() {
 		return (
 			<div className="container">
-				<div>Welcome Home</div>
+				<h2>Welcome Home</h2>
 				<ListGroup>
 				  <ListGroup.Item>
 				  	<Link to="register">Register</Link>
