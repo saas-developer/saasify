@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
-mongoose.connect('mongodb://0.0.0.0/saas', { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 	.then(() => {
 		console.log('SUCCESS: DB connection ');
 	})
