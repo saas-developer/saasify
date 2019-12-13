@@ -2,6 +2,11 @@ const User = require('../models/User');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const uuidv1 = require('uuid/v1');
+const {
+  sendAccountActivationEmail,
+  resendActivationLink,
+  sendResetPasswordLinkEmail
+} = require('../lib/EmailManager');
 
 exports.register = async (req, res, next) => {
 	const {
@@ -80,6 +85,9 @@ exports.register = async (req, res, next) => {
 		const savedUser = await user.save();
 
 		console.log('savedUser ', savedUser);
+
+		// Here -> We will send the email
+		sendAccountActivationEmail(savedUser);
 
 		res.status(200).send({
 			user: User.toClientObject(savedUser)
@@ -260,6 +268,7 @@ exports.resendActivationLink = async (req, res, next) => {
 
 			// Send activation email
 			//...
+			await resendActivationLink(user);
 		}
 
 
@@ -306,6 +315,7 @@ exports.resetPasswordLink = async ( req, res, next) => {
 			const savedUser = user.save();
 
 			// Send email now ...
+			sendResetPasswordLinkEmail(user);
 
 		}
 
