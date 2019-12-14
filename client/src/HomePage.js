@@ -27,6 +27,9 @@ export class HomePage extends Component {
 				  <ListGroup.Item>
 				  	<Link to="/account/reset-password">Reset Password</Link>
 				  </ListGroup.Item>
+          <ListGroup.Item>
+            <Link to="/payments">Payments</Link>
+          </ListGroup.Item>
 				</ListGroup>
 			</div>
 		);
