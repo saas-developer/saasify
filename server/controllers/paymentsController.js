@@ -17,7 +17,7 @@ exports.createSession = async (req, res, next) => {
         cancel_url: process.env.BASE_URL + '/payments/cancel?session_id={CHECKOUT_SESSION_ID}',
       });
 
-    res.status(200),send({
+    res.status(200).send({
       session
     })
   } catch(e) {
@@ -27,3 +27,32 @@ exports.createSession = async (req, res, next) => {
     })
   }
 }
+
+exports.processStripeWebhook = async (req, res, next) => {
+  const sig = req.headers['stripe-signature'];
+  const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the checkout.session.completed event
+    if (event.type === 'checkout.session.completed') {
+      console.log('event');
+      console.log(JSON.stringify(event, 4, 4));
+      const session = event.data.object;
+      console.log('session');
+      console.log(JSON.stringify(session, 4, 4));
+
+      // Fulfill the purchase...
+      // Update the database with subscription details
+    }
+
+
+    res.json({received: true});
+}
+

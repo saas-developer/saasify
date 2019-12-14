@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const authController = require('./controllers/authController');
 const paymentsController = require('./controllers/paymentsController');
 const passport = require('passport');
@@ -26,6 +27,13 @@ function addRoutes(app) {
 	app.get('/api/test-auth', checkAuth , authController.testAuth);
 
   app.post('/api/payments/session', checkAuth, paymentsController.createSession)
+
+  app.post('/api/stripe/webhooks',
+    bodyParser.raw({
+      type: 'application/json'
+    }),
+    paymentsController.processStripeWebhook
+  )
 }
 
 const routes = {
