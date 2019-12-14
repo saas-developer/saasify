@@ -18,7 +18,11 @@ if (!User) {
 
 		// Fields related to reset password
 		resetPasswordToken: { type: String, unique: true, sparse: true },
-		resetPasswordTokenSentAt: { type: Date }
+		resetPasswordTokenSentAt: { type: Date },
+
+    // Save Stripe related information
+    stripeCheckoutSessionId: { type: String, unique: true, sparse: true },
+    stripeDetails: {}
 	},
 	{
 		timestamps: true
