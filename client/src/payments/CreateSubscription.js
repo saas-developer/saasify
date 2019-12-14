@@ -37,19 +37,26 @@ export default class CreateSubscription extends React.Component {
       return response.json();
     }).then((results) => {
       console.log('results ', results);
-      const checkoutSessionId = results.session.id;
+      const sessionCreated = results.sessionCreated;
 
-      stripe.redirectToCheckout({
-        // Make the id field from the Checkout Session creation API response
-        // available to this file, so you can provide it as parameter here
-        // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-        sessionId: checkoutSessionId
-      }).then(function (result) {
-        // If `redirectToCheckout` fails due to a browser or network
-        // error, display the localized error message to your customer
-        // using `result.error.message`.
-        console.log('result.error.message', result.error.message);
-      });
+      if (sessionCreated) {
+        const checkoutSessionId = results.session.id;
+
+        stripe.redirectToCheckout({
+          // Make the id field from the Checkout Session creation API response
+          // available to this file, so you can provide it as parameter here
+          // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+          sessionId: checkoutSessionId
+        }).then(function (result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer
+          // using `result.error.message`.
+          console.log('result.error.message', result.error.message);
+        });
+      } else {
+        // Show SUCCESS message
+      }
+
       
     }).catch((error) => {
       console.log('error ', error);

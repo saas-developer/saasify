@@ -25,26 +25,69 @@ exports.createSession = async (req, res, next) => {
       user = await user.save();
     }
 
+    // If user does not have a subscription
+    //  THEN use checkout to create a new subscription
+    //  ELSE upgrade/downgrade existing subscription
 
-    const session = await stripe.checkout.sessions.create({
-        customer: customerId,
-        payment_method_types: ['card'],
-        subscription_data: {
-          items: [{
-            plan: planId,
-          }],
-        },
-        success_url: process.env.BASE_URL + '/payments/success?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: process.env.BASE_URL + '/payments/cancel?session_id={CHECKOUT_SESSION_ID}',
+    const stripeDetails = user.stripeDetails || {};
+    const userAlreadyHasSubscription = stripeDetails.plan && stripeDetails.subscriptionId;
+
+    if (userAlreadyHasSubscription) {
+      // User has a subscription plan
+      // Upgrade/Downgrade existing one
+
+      const subscription = await stripe.subscriptions.retrieve(stripeDetails.subscriptionId);
+      const updatedSubscription = await stripe.subscriptions.update(stripeDetails.subscriptionId, {
+        cancel_at_period_end: false,
+        items: [{
+          id: subscription.items.data[0].id,
+          plan: planId,
+        }]
       });
 
-    // Session created. Now save the ID to the User model
-    user.stripeCheckoutSessionId = session.id;
-    await user.save();
+      const newPlan = updatedSubscription.items.data[0].plan;
+      user.stripeDetails = user.stripeDetails || {};
+      user.stripeDetails.plan = newPlan;
 
-    res.status(200).send({
-      session
-    })
+      user.markModified('stripeDetails');
+
+      user = await user.save();
+
+      console.log('updatedSubscription');
+      console.log(JSON.stringify(updatedSubscription, 4, 4));
+
+      res.status(200).send({
+        success: true,
+        sessionCreated: false
+      })
+
+    } else {
+      // User does not have a subscription plan
+      // Create a new one
+      const session = await stripe.checkout.sessions.create({
+          customer: customerId,
+          payment_method_types: ['card'],
+          subscription_data: {
+            items: [{
+              plan: planId,
+            }],
+          },
+          success_url: process.env.BASE_URL + '/payments/success?session_id={CHECKOUT_SESSION_ID}',
+          cancel_url: process.env.BASE_URL + '/payments/cancel?session_id={CHECKOUT_SESSION_ID}',
+        });
+
+      // Session created. Now save the ID to the User model
+      user.stripeCheckoutSessionId = session.id;
+      await user.save();
+
+      res.status(200).send({
+        sessionCreated: true,
+        session
+      })
+    }
+
+
+    
   } catch(e) {
     console.log('e', e);
     res.status(500).send({
@@ -67,12 +110,8 @@ exports.processStripeWebhook = async (req, res, next) => {
 
   // Handle the checkout.session.completed event
     if (event.type === 'checkout.session.completed') {
-      console.log('event');
-      console.log(JSON.stringify(event, 4, 4));
       const session = event.data.object;
-      console.log('session');
-      console.log(JSON.stringify(session, 4, 4));
-
+      
       // Fulfill the purchase...
       // Update the database with subscription details
       handleCheckoutSessionCompleted(session);
