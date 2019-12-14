@@ -12,6 +12,7 @@ import ResetPassword from './account/ResetPassword';
 import Login from './account/Login';
 import Header from './header/Header'
 import Payments from './payments/Payments';
+import SuccessSubscription from './payments/SuccessSubscription';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
@@ -30,6 +31,7 @@ function App() {
 		  <Route exact path="/account/reset-password-link" component={ResetPasswordLink} />
 		  <Route exact path="/account/reset-password" component={ResetPassword} />
       <Route exact path="/payments" component={Payments} />
+      <Route exact path="/payments/success" component={SuccessSubscription} />
       </div>
 
 
