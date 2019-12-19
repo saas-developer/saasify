@@ -64,6 +64,11 @@ export default class CreateSubscription extends React.Component {
   }
 
   render() {
+    const {
+      user
+    } = this.props;
+    const currentPlan = user && user.stripeDetails && user.stripeDetails.plan && user.stripeDetails.plan.nickname;
+
     return (
       <div>
         <Form>
@@ -84,7 +89,11 @@ export default class CreateSubscription extends React.Component {
             variant="info"
             onClick={this.handleSubmitClick}
             disabled={this.state.selectedPlan === ''}
-          >Subscribe</Button>
+          >
+            {
+              currentPlan ? 'Update Plan' : 'Subscribe to New Plan'
+            }
+          </Button>
         </Form>
       </div>
     );

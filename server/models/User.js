@@ -73,6 +73,7 @@ if (!User) {
 		const clientObject = {
 			_id: userObject._id,
 			email: userObject.email,
+      stripeDetails: userObject.stripeDetails,
 			activated: userObject.activated,
 			createdAt: userObject.createdAt,
 			updatedAt: userObject.updatedAt,

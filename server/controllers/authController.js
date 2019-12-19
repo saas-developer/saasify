@@ -384,6 +384,12 @@ exports.resetPassword = async (req, res, next) => {
 
 }
 
+exports.getLoggedInUser = (req, res, next) => {
+  res.send({
+    user: User.toClientObject(req.user)
+  })
+}
+
 exports.testAuth = async (req, res, next) => {
 	console.log('req.user ', req.user);
 
