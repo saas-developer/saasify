@@ -14,6 +14,8 @@ function addRoutes(app) {
 		});
 	})
 
+	app.get('/api/logged-in-user', checkAuth, authController.getLoggedInUser);
+
 	
 	app.post('/api/register', authController.register);
 	app.post('/api/login', authController.login);
