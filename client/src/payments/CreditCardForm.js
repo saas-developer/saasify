@@ -36,6 +36,10 @@ class CardSection extends React.Component {
 
     console.log('paymentMethod', paymentMethod);
     console.log('error', error);
+
+    if (!error) {
+        this.props.createSubscription(paymentMethod);
+    }
   }
 
   render() {

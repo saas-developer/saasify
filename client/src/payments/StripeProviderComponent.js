@@ -8,7 +8,10 @@ export default class StripeProviderComponent extends React.Component {
       <div>
         <StripeProvider apiKey="pk_test_cPAYuvk1DKJ0cqm0cm0Zblms" >
           <Elements>
-            <CreditCardForm user={this.props.user} />
+            <CreditCardForm
+                user={this.props.user}
+                createSubscription={this.props.createSubscription}
+            />
           </Elements>
         </StripeProvider>
       </div>
