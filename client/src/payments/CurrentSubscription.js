@@ -1,4 +1,5 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card';
 
 export default class CurrentSubscription extends React.Component {
     render() {
@@ -17,14 +18,19 @@ export default class CurrentSubscription extends React.Component {
         
 
         return (
-            <div>
-                <div>You are subscribed to</div>
-                <p>{nickname}</p>
-                <div>We will charge you</div>
-                <p>{amount}</p>
-                <div>Interval</div>
-                <p>{interval}</p>
-            </div>
+            <Card>
+                <Card.Body>
+                    <h4>Your subscription details</h4>
+                    <div>
+                        <div>You are subscribed to</div>
+                        <p>{nickname}</p>
+                        <div>We will charge you</div>
+                        <p>{amount}</p>
+                        <div>Interval</div>
+                        <p>{interval}</p>
+                    </div>
+                </Card.Body>
+            </Card>
         );
     }
 }
