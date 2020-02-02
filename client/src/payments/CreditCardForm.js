@@ -43,7 +43,6 @@ class CardSection extends React.Component {
   }
 
   render() {
-    console.log('CardSection this.props', this.props);
     return (
       <div>
         <form>
@@ -57,7 +56,7 @@ class CardSection extends React.Component {
             type="button"
             onClick={this.handleSubmitClick}
           >
-            Submit
+            Subscribe
           </Button>
         </form>
       </div>
