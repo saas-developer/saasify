@@ -61,6 +61,31 @@ export default class Payments extends React.Component {
 		})
 	}
 
+    deleteSubscription = () => {
+        const url = '/api/payments/subscriptions';
+        
+        fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+            method: 'DELETE'
+        }).then((response) => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err })
+            }
+            return response.json();
+        }).then((results) => {
+            console.log('results ', results);
+            this.getPaymentDetails();
+            
+        }).catch((error) => {
+            console.log('error ', error);
+            this.getPaymentDetails();
+        })
+    }
+
 	getSubscription = (paymentMethod) => {
 		const url = '/api/payments/subscriptions';
 		
@@ -119,13 +144,12 @@ export default class Payments extends React.Component {
 			<div>
 			  <h2>Payments</h2>
 
-			  <CurrentSubscription subscription={this.state.subscription}/>
+			  <CurrentSubscription
+                subscription={this.state.subscription}
+                deleteSubscription={this.deleteSubscription}
+              />
 			  <CurrentCard card={this.state.card}/>
 
-			  <StripeProviderComponent
-			  	user={this.props.user}
-			  	createSubscription={this.createSubscription}
-			  />
 			  <CreateSubscription
                   user={this.props.user}
                   card={this.state.card}
