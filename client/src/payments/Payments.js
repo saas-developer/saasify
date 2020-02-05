@@ -2,11 +2,13 @@ import React from 'react';
 import CurrentSubscription from './CurrentSubscription';
 import CurrentCard from './CurrentCard';
 import StripeProviderComponent from './StripeProviderComponent';
+import CreateSubscription from './CreateSubscription';
 
 export default class Payments extends React.Component {
 	state = {
 		subscription: null,
-		card: null
+		card: null,
+        plan: ''
 	}
 	componentDidMount() {
 		this.getPaymentDetails();
@@ -17,7 +19,20 @@ export default class Payments extends React.Component {
 		this.getCard();
 	}
 
+    setPlan = (planId) => {
+        this.setState({
+            plan: planId
+        })
+    }
+
 	createSubscription = (paymentMethod) => {
+        if (!this.state.plan) {
+            // Show error to user
+            return;
+        }
+
+        const planId = this.state.plan;
+
 		const url = '/api/payments/subscriptions';
 		
 		fetch(url, {
@@ -28,7 +43,7 @@ export default class Payments extends React.Component {
 			credentials: 'same-origin',
 			method: 'POST',
 			body: JSON.stringify({
-				planId: 'stripe-plan-startup',
+				planId: planId,
 				paymentMethod
 			})
 		}).then((response) => {
@@ -38,9 +53,11 @@ export default class Payments extends React.Component {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
+            this.getPaymentDetails();
 			
 		}).catch((error) => {
 			console.log('error ', error);
+            this.getPaymentDetails();
 		})
 	}
 
@@ -109,6 +126,13 @@ export default class Payments extends React.Component {
 			  	user={this.props.user}
 			  	createSubscription={this.createSubscription}
 			  />
+			  <CreateSubscription
+                  user={this.props.user}
+                  card={this.state.card}
+                  plan={this.state.plan}
+                  setPlan={this.setPlan}
+                  createSubscription={this.createSubscription}
+              />
 			</div>
 		  </div>
 		);

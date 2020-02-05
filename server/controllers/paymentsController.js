@@ -2,7 +2,8 @@ const {
     createCustomer,
     createSubscription,
     updateSubscription,
-    retrievePaymentMethod
+    retrievePaymentMethod,
+    deleteSubscription
 } = require('../lib/StripeManager');
 const User = require('../models/User');
 const _ = require('lodash');
@@ -18,7 +19,21 @@ exports.createSubscription = async (req, res, next) => {
 
     const email = user.email;
     const userId = user.id;
-    const paymentMethodId = paymentMethod.id;
+    let paymentMethodId;
+
+    if (!paymentMethod) {
+        // Get paymentMethod from user object
+        paymentMethodId = _.get(user, 'stripeDetails.customer.invoice_settings.default_payment_method');
+    } else {
+        paymentMethodId = paymentMethod.id;
+    }
+
+    if (!paymentMethodId) {
+        res.status(422).send({
+            message: 'No payment method available for user'
+        });
+        return;
+    }
 
     // Step 1: Get stripe customer from database
     let stripeCustomer = user.stripeDetails && user.stripeDetails.customer;
