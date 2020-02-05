@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 export default class CurrentSubscription extends React.Component {
     render() {
@@ -30,6 +31,14 @@ export default class CurrentSubscription extends React.Component {
                         <p>{interval}</p>
                     </div>
                 </Card.Body>
+                <Button
+                    style={{
+                        maxWidth: 300
+                    }}
+                    onClick={this.props.deleteSubscription}
+                    variant="danger"
+                >Delete Subscription
+                </Button>
             </Card>
         );
     }

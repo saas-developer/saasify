@@ -105,6 +105,39 @@ exports.getCard = async (req, res, next) => {
     })
 }
 
+exports.deleteSubscription = async (req, res, next) => {
+    let user = req.user;
+    const subscriptionId = _.get(user, 'stripeDetails.subscription.id');
+
+    if (!subscriptionId) {
+        res.status(422).send({
+            message: 'You do not have any active subscriptions'
+        });
+        return;
+    }
+
+    let deletedSubscription;
+
+    try {
+        deletedSubscription = await deleteSubscription(subscriptionId);
+        user = await User.saveStripeSubscription(user.id, null);
+
+        console.log('deletedSubscription', deletedSubscription);
+    } catch (e) {
+        res.status(500).send({
+            code: 'GLOBAL_ERROR',
+            field: '',
+            message: 'An occurred while cancelling your subscription'
+        });
+        return;
+    }
+
+    res.send({
+        subscription: deletedSubscription
+    })
+
+}
+
 
 
 

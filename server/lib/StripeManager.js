@@ -39,3 +39,8 @@ exports.retrievePaymentMethod = async (paymentMethodId) => {
 
     return paymentMethod;
 }
+
+exports.deleteSubscription = async (subscriptionId) => {
+    const deletedSubscription = await stripe.subscriptions.del(subscriptionId)
+    return deletedSubscription;
+}
