@@ -3,7 +3,9 @@ const {
     createSubscription,
     updateSubscription,
     retrievePaymentMethod,
-    deleteSubscription
+    deleteSubscription,
+    attachPaymentMethodToCustomer,
+    updateCustomer
 } = require('../lib/StripeManager');
 const User = require('../models/User');
 const _ = require('lodash');
@@ -103,6 +105,52 @@ exports.getCard = async (req, res, next) => {
     res.send({
         card: null
     })
+}
+
+exports.updateCard = async (req, res, next) => {
+    const {
+        paymentMethod
+    } = req.body;
+
+    if (!paymentMethod) {
+        res.status(422).send({
+            message: 'Payment Method is required'
+        });
+        return;
+    }
+
+    let user = req.user;
+    let paymentMethodId = paymentMethod.id;
+    let customerId = _.get(user, 'stripeDetails.customer.id');
+    let updatedPaymethod;
+    let updatedCustomer;
+
+    try {
+        // Step 1: Attach payment method to customer
+        updatedPaymethod = await attachPaymentMethodToCustomer(paymentMethodId, customerId);
+        // Step 2: Update Customer and set payment method as default payment method
+        updatedCustomer = await updateCustomer(customerId, {
+            invoice_settings: {
+                default_payment_method: paymentMethodId
+            }
+        })
+        // Step 3: Update our database with new customer information
+        user = await User.saveStripeCustomer(user.id, updatedCustomer);
+
+    } catch (e) {
+        console.log('e', e);
+        res.status(500).send({
+            code: 'GLOBAL_ERROR',
+            field: '',
+            message: 'An occurred while updating your card'
+        });
+        return;
+    }
+
+    res.send({
+        customer: updatedCustomer
+    })
+
 }
 
 exports.deleteSubscription = async (req, res, next) => {

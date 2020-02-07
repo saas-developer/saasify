@@ -44,3 +44,21 @@ exports.deleteSubscription = async (subscriptionId) => {
     const deletedSubscription = await stripe.subscriptions.del(subscriptionId)
     return deletedSubscription;
 }
+
+exports.attachPaymentMethodToCustomer = async (paymentMethodId, customerId) => {
+    const paymentMethod = await stripe.paymentMethods.attach(paymentMethodId, {
+        customer: customerId
+    });
+    return paymentMethod;
+}
+
+exports.updateCustomer = async (customerId, customerData) => {
+    const updatedCustomer = await stripe.customers.update(customerId, customerData);
+    return updatedCustomer;
+}
+
+
+
+
+
+
