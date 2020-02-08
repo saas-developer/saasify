@@ -38,7 +38,7 @@ class CardSection extends React.Component {
     console.log('error', error);
 
     if (!error) {
-        this.props.createSubscription(paymentMethod);
+        this.props.onPaymentMethodCreated(paymentMethod);
     }
   }
 
@@ -56,7 +56,7 @@ class CardSection extends React.Component {
             type="button"
             onClick={this.handleSubmitClick}
           >
-            Subscribe
+            {this.props.actionButtonText}
           </Button>
         </form>
       </div>

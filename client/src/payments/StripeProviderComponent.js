@@ -10,7 +10,8 @@ export default class StripeProviderComponent extends React.Component {
           <Elements>
             <CreditCardForm
                 user={this.props.user}
-                createSubscription={this.props.createSubscription}
+                onPaymentMethodCreated={this.props.onPaymentMethodCreated}
+                actionButtonText={this.props.actionButtonText}
             />
           </Elements>
         </StripeProvider>

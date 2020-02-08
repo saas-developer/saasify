@@ -10,14 +10,14 @@ export default class CreateSubscription extends React.Component {
     }
 
     createSubscription = () => {
-        this.props.createSubscription();
+        this.props.onPaymentMethodCreated();
     }
 
     render() {
         return (
             <Card>
               <Card.Body>
-                <h4>Your card details</h4>
+                <h4>Subscribe to a plan</h4>
                     <div>
                         <Form>
                           <Form.Group controlId="stripeForm.planSelect">
@@ -37,7 +37,8 @@ export default class CreateSubscription extends React.Component {
                             !this.props.card &&
                             <StripeProviderComponent
                                 user={this.props.user}
-                                createSubscription={this.props.createSubscription}
+                                onPaymentMethodCreated={this.props.onPaymentMethodCreated}
+                                actionButtonText={"Subscribe"}
                             />
                         }
 
@@ -48,7 +49,7 @@ export default class CreateSubscription extends React.Component {
                               type="button"
                               onClick={this.createSubscription}
                             >
-                              Subscribe
+                              {this.props.actionButtonText}
                             </Button>
                         }
 
