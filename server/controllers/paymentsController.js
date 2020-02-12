@@ -9,6 +9,7 @@ const {
 } = require('../lib/StripeManager');
 const User = require('../models/User');
 const _ = require('lodash');
+const stripe = require('stripe');
 
 exports.createSubscription = async (req, res, next) => {
     const {
@@ -184,6 +185,47 @@ exports.deleteSubscription = async (req, res, next) => {
         subscription: deletedSubscription
     })
 
+}
+
+exports.processStripeWebhook = async (req, res, next) => {
+    const sig = req.headers['stripe-signature'];
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET;
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+    }
+    catch (err) {
+        res.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+    }
+
+    switch (event.type) {
+        case 'customer.subscription.updated': 
+            console.log('Received customer.subscription.updated');
+            console.log('event', event);
+            const subscription = event.data.object;
+            const customer = 'cus_GiK4wRu8IyTFoK'; // subscription.customer;
+
+            let user = await User.findOne({
+                'stripeDetails.customer.id': customer
+            });
+
+            if (user) {
+                // Save subscription to the database
+                console.log('user.toObject()', user.toObject());
+                user = await User.saveStripeSubscription(user._id, subscription)
+            }
+
+            break;
+
+    }
+    
+    // Return a response to acknowledge receipt of the event
+    res.json({
+        received: true
+    });
 }
 
 
