@@ -2,6 +2,7 @@ const authController = require('./controllers/authController');
 const paymentsController = require('./controllers/paymentsController');
 const passport = require('passport');
 const checkAuth = passport.authenticate('jwt', { session: false });
+const bodyParser = require('body-parser');
 
 function addRoutes(app) {
 	app.all('*', (req, res, next) => {
@@ -33,6 +34,14 @@ function addRoutes(app) {
     app.get('/api/payments/subscriptions', checkAuth, paymentsController.getSubscription );
     app.get('/api/payments/cards', checkAuth, paymentsController.getCard );
     app.post('/api/payments/cards', checkAuth, paymentsController.updateCard );
+
+    // Stripe Webhooks
+    app.post('/api/stripe/webhooks',
+        bodyParser.raw({
+            type: 'application/json'
+        }),
+        paymentsController.processStripeWebhook
+    );
 
 }
 

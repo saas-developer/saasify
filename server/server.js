@@ -12,7 +12,13 @@ const app = express();
 
 app.use(compression());
 app.use(bodyParser.json({
-	limit: '5mb'
+	limit: '5mb',
+
+    verify: (req, res, buf) => {
+        if (req.originalUrl === '/api/stripe/webhooks') {
+            req.rawBody = buf;
+        }
+    }
 }));
 app.use(cookieParser());
 
