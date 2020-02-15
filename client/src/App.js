@@ -10,6 +10,7 @@ import ResendActivationLink from './account/ResendActivationLink';
 import ResetPasswordLink from './account/ResetPasswordLink';
 import ResetPassword from './account/ResetPassword';
 import Login from './account/Login';
+import Logout from './account/Logout';
 import Header from './header/Header'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
@@ -23,6 +24,7 @@ function App() {
       <div className="app-container">
 		  <Route exact path="/" component={HomePage} />
 		  <Route exact path="/login" component={Login} />
+          <Route exact path="/logout" component={Logout} />
 		  <Route exact path="/register" component={Register} />
 		  <Route exact path="/account/activate" component={AccountActivation} />
 		  <Route exact path="/account/resend-activation-link" component={ResendActivationLink} />

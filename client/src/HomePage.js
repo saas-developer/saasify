@@ -15,6 +15,9 @@ export class HomePage extends Component {
 				  <ListGroup.Item>
 				  	<Link to="login">Login</Link>
 				  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Link to="logout">Logout</Link>
+                  </ListGroup.Item>
 				  <ListGroup.Item>
 				  	<Link to="/account/activate">Activate</Link>
 				  </ListGroup.Item>
