@@ -13,10 +13,21 @@ export default class CurrentCard extends React.Component {
         const exp_year = _get(card, 'exp_year');
         const last4 = _get(card, 'last4');
 
+        if (!card) {
+            return (
+                <Card className="w-100">
+                    <Card.Body>
+                        <h4>Card details</h4>
+                        <div>You do not have any saved cards.</div>
+                    </Card.Body>
+                </Card>
+            )
+        }
+
         return (
-            <Card>
+            <Card className="w-100">
               <Card.Body>
-                <h4>Your card details</h4>
+                <h4>Card details</h4>
                 <div>
                     <div>Brand</div>
                     <p>{brand}</p>

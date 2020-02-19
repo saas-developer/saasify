@@ -5,7 +5,7 @@ import StripeProviderComponent from './StripeProviderComponent';
 export default class UpdateCard extends React.Component {
     render() {
         return (
-            <Card>
+            <Card className="mb-4">
               <Card.Body>
                 <h4>Update Card</h4>
                 <div>

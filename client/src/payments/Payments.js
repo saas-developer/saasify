@@ -4,6 +4,7 @@ import CurrentCard from './CurrentCard';
 import StripeProviderComponent from './StripeProviderComponent';
 import CreateSubscription from './CreateSubscription';
 import UpdateCard from './UpdateCard';
+import _get from 'lodash/get';
 
 export default class Payments extends React.Component {
 	state = {
@@ -54,11 +55,13 @@ export default class Payments extends React.Component {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
 			
 		}).catch((error) => {
 			console.log('error ', error);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
 		})
 	}
 
@@ -82,11 +85,13 @@ export default class Payments extends React.Component {
             return response.json();
         }).then((results) => {
             console.log('results ', results);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
             
         }).catch((error) => {
             console.log('error ', error);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
         })
     }
 
@@ -107,11 +112,13 @@ export default class Payments extends React.Component {
             return response.json();
         }).then((results) => {
             console.log('results ', results);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
             
         }).catch((error) => {
             console.log('error ', error);
-            this.getPaymentDetails();
+            // this.getPaymentDetails();
+            window.location.href = '/payments';
         })
     }
 
@@ -168,21 +175,35 @@ export default class Payments extends React.Component {
 	}
 
 	render() {
+        const customer = _get(this.props.user, 'stripeDetails.customer');
+
 		return (
 		  <div className="container">
 			<div>
 			  <h2>Payments</h2>
 
-			  <CurrentSubscription
-                subscription={this.state.subscription}
-                deleteSubscription={this.deleteSubscription}
-              />
-			  <CurrentCard card={this.state.card}/>
-              <UpdateCard
-                user={this.props.user}
-                card={this.state.card}
-                onPaymentMethodCreated={this.updateCard}
-              />
+              <div className="row">
+                <div className="col-12 col-sm-6 mb-4 d-flex align-items-stretch">
+                      <CurrentSubscription
+                        subscription={this.state.subscription}
+                        deleteSubscription={this.deleteSubscription}
+                      />
+                </div>
+                <div className="col-12 col-sm-6 mb-4 d-flex align-items-stretch">
+                    <CurrentCard card={this.state.card}/>
+                </div>
+              </div>
+
+			  
+			  
+              {
+                customer &&
+                <UpdateCard
+                  user={this.props.user}
+                  card={this.state.card}
+                  onPaymentMethodCreated={this.updateCard}
+                />
+              }
 
 			  <CreateSubscription
                   user={this.props.user}
