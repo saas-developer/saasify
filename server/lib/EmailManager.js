@@ -1,5 +1,6 @@
 const mailgun = require("mailgun-js");
 const DOMAIN = process.env.MAILGUN_DOMAIN;
+const APP_EMAIL = process.env.APP_EMAIL;
 
 exports.sendAccountActivationEmail = async (user) => {
 
@@ -16,8 +17,8 @@ exports.sendAccountActivationEmail = async (user) => {
 
 
 	const data = {
-		from: 'thepagemonk@gmail.com',
-		to: process.env.NODE_ENV === 'production' ? user.email : 'thepagemonk@gmail.com',
+		from: APP_EMAIL,
+		to: process.env.NODE_ENV === 'production' ? user.email : APP_EMAIL,
 		subject: 'Account Activation',
 		template: "account_activation",
 		'h:X-Mailgun-Variables': JSON.stringify({
@@ -55,8 +56,8 @@ exports.sendResetPasswordLinkEmail = async (user) => {
 
 
 	const data = {
-		from: 'thepagemonk@gmail.com',
-		to: process.env.NODE_ENV === 'production' ? user.email : 'thepagemonk@gmail.com',
+		from: APP_EMAIL,
+		to: process.env.NODE_ENV === 'production' ? user.email : APP_EMAIL,
 		subject: 'Reset Password',
 		template: "reset_password_link",
 		'h:X-Mailgun-Variables': JSON.stringify({
