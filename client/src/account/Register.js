@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import Errors from '../common/Errors';
+import { NotificationManager } from 'react-notifications';
 import './account.scss';
 
 export class Register extends Component {
 	state = {
 		email: '',
-		password: ''
+		password: '',
+        success: false,
+        error: false,
+        errors: null
 	}
 
 	handleEmailChange = (event) => {
@@ -22,6 +28,11 @@ export class Register extends Component {
 	}
 
 	handleSubmitClick = () => {
+        this.setState({
+            success: false,
+            error: false,
+            errors: []
+        })
 		// Submit the email and password to the server
 		const url = '/api/register';
 		
@@ -43,8 +54,18 @@ export class Register extends Component {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
+            this.setState({
+                success: true,
+                error: false,
+                errors: null
+            })
 		}).catch((error) => {
 			console.log('error ', error);
+            this.setState({
+                success: false,
+                error: true,
+                errors: error.errors
+            })
 		})
 	}
 
@@ -56,6 +77,17 @@ export class Register extends Component {
 					<h2>Register</h2>
 					<div>
 						<Form>
+                          {
+                            this.state.success &&
+                            <Alert variant="success">
+                                <div>Successfully registered your account.</div>
+                                <div>You need to confirm your email address before logging in.</div>
+                            </Alert>
+
+                          }
+                          {
+                            this.state.errors && <Errors errors={this.state.errors} />
+                          }
 						  <Form.Group controlId="formBasicEmail">
 						    <Form.Label>Email address</Form.Label>
 						    <Form.Control

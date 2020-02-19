@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import Errors from '../common/Errors';
 import './account.scss';
 
 class ResendActivationLink extends Component {
 	state = {
-		email: ''
+		email: '',
+        success: false,
+        error: false,
+        errors: null
 	}
 
 	handleEmailChange = (event) => {
@@ -16,6 +21,12 @@ class ResendActivationLink extends Component {
 	}
 
 	handleSubmitClick = () => {
+        this.setState({
+            success: false,
+            error: false,
+            errors: null
+        })
+
 		// Submit the email and password to the server
 		const url = '/api/resend-activation-link';
 		
@@ -36,9 +47,20 @@ class ResendActivationLink extends Component {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
-			
+			this.setState({
+                success: true,
+                error: false,
+                errors: null
+            })
+
 		}).catch((error) => {
 			console.log('error ', error);
+            this.setState({
+                success: false,
+                error: true,
+                errors: error && error.errors
+            })
+
 		})
 	}
 
@@ -49,6 +71,16 @@ class ResendActivationLink extends Component {
 					<h2>Resend Activation Link</h2>
 					<div>
 						<Form>
+                          {
+                            this.state.success &&
+                            <Alert variant="success">
+                                <div>Activation Link has been sent</div>
+                            </Alert>
+
+                          }    
+                          {
+                            this.state.errors && <Errors errors={this.state.errors} />
+                          }
 						  <Form.Group controlId="formBasicEmail">
 						    <Form.Label>Email address</Form.Label>
 						    <Form.Control

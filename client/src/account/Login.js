@@ -3,12 +3,17 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
+import Errors from '../common/Errors';
 import './account.scss';
 
 export class Login extends Component {
 	state = {
 		email: '',
-		password: ''
+		password: '',
+        success: false,
+        error: false,
+        errors: null
 	}
 
 	handleEmailChange = (event) => {
@@ -23,6 +28,12 @@ export class Login extends Component {
 	}
 
 	handleSubmitClick = () => {
+        this.setState({
+            success: false,
+            error: false,
+            errors: null
+        })
+
 		// Submit the email and password to the server
 		const url = '/api/login';
 		
@@ -49,8 +60,16 @@ export class Login extends Component {
 			Cookies.set('token', token, {
 				expires: 7
 			})
+            NotificationManager.success('You have successfully logged in', 'Login Success');
+            window.location.href = '/';
 		}).catch((error) => {
 			console.log('error ', error);
+            this.setState({
+                success: false,
+                error: true,
+                errors: error && error.errors
+            })
+
 		})
 	}
 
@@ -62,6 +81,9 @@ export class Login extends Component {
 					<h2>Login</h2>
 					<div>
 						<Form>
+                          {
+                            this.state.errors && <Errors errors={this.state.errors} />
+                          }
 						  <Form.Group controlId="formBasicEmail">
 						    <Form.Label>Email address</Form.Label>
 						    <Form.Control

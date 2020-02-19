@@ -13,7 +13,9 @@ import Login from './account/Login';
 import Logout from './account/Logout';
 import Header from './header/Header'
 import Payments from './payments/Payments';
+import { NotificationContainer } from 'react-notifications';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-notifications/dist/react-notifications.css';
 import './App.scss';
 
 class App extends React.Component {
@@ -53,6 +55,7 @@ class App extends React.Component {
   render() {
 	return (
 	  <div className="app">
+        <NotificationContainer />
 		<header className="app-header">
 		  <Header />
 		</header>
@@ -65,17 +68,14 @@ class App extends React.Component {
 		  <Route exact path="/account/resend-activation-link" component={ResendActivationLink} />
 		  <Route exact path="/account/reset-password-link" component={ResetPasswordLink} />
 		  <Route exact path="/account/reset-password" component={ResetPassword} />
-		<Route
-		  exact
-		  path="/payments"
-		  render={(props) => <Payments {...props} user={this.state.user} /> }
-		/>
+		  <Route
+		    exact
+		    path="/payments"
+		    render={(props) => <Payments {...props} user={this.state.user} /> }
+		  />
 		</div>
-
-
 	  </div>
 	);
-
   }
 }
 
