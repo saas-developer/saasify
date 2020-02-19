@@ -9,7 +9,12 @@ export default class CurrentSubscription extends React.Component {
         } = this.props;
         if (!subscription) {
             return (
-                <div>You do not have any subscriptions yet.</div>
+                <Card className="w-100">
+                    <Card.Body>
+                        <h4>Subscription details</h4>
+                        <div>You do not have any subscriptions yet.</div>
+                    </Card.Body>
+                </Card>
             )
         }
 
@@ -19,9 +24,9 @@ export default class CurrentSubscription extends React.Component {
         
 
         return (
-            <Card>
+            <Card className="w-100">
                 <Card.Body>
-                    <h4>Your subscription details</h4>
+                    <h4>Subscription details</h4>
                     <div>
                         <div>You are subscribed to</div>
                         <p>{nickname}</p>
@@ -30,15 +35,15 @@ export default class CurrentSubscription extends React.Component {
                         <div>Interval</div>
                         <p>{interval}</p>
                     </div>
+                    <Button
+                        style={{
+                            maxWidth: 300
+                        }}
+                        onClick={this.props.deleteSubscription}
+                        variant="danger"
+                    >Delete Subscription
+                    </Button>
                 </Card.Body>
-                <Button
-                    style={{
-                        maxWidth: 300
-                    }}
-                    onClick={this.props.deleteSubscription}
-                    variant="danger"
-                >Delete Subscription
-                </Button>
             </Card>
         );
     }

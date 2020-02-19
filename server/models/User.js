@@ -75,6 +75,7 @@ if (!User) {
 			activated: userObject.activated,
 			createdAt: userObject.createdAt,
 			updatedAt: userObject.updatedAt,
+            stripeDetails: userObject.stripeDetails
 		};
 
 		return clientObject;
