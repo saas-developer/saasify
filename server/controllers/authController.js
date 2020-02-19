@@ -144,6 +144,14 @@ exports.login = async (req, res, next) => {
 			res.status(401).send(info);
 			return;			
 		}
+
+        if (!user.activated) {
+            res.status(403).send({
+                code: 'GLOBAL_ERROR',
+                message: 'Account is not activated.'
+            })
+            return;
+        }
 		
 		const userObject = user.toObject();
 
