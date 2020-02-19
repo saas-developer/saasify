@@ -16,11 +16,16 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 		}
 
 		if (!user) {
-			// No user with that email address.. Cannot proceed
-			done(null, null, {
-				code: 'GLOBAL_ERROR',
-				message: 'Your login details could not be verified. Please try again.'
-			})
+            const errorObject = {
+                error: true,
+                errors: [{
+                    code: 'GLOBAL_ERROR',
+                    message: 'Your login details could not be verified. Please try again.'
+                }]
+            };
+
+            // No user with that email address.. Cannot proceed
+            done(null, null, errorObject);
 
 			return;
 		}
@@ -33,10 +38,16 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 			}
 
 			if (!isMatch) {
-				done(null, null, {
-					code: 'GLOBAL_ERROR',
-					message: 'Your login details could not be verified. Please try again.'
-				})
+				const errorObject = {
+                    error: true,
+                    errors: [{
+                        code: 'GLOBAL_ERROR',
+                        message: 'Your login details could not be verified. Please try again.'
+                    }]
+                };
+
+                done(null, null, errorObject);
+
 				return;
 			}
 
