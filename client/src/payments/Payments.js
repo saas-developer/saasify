@@ -6,6 +6,8 @@ import CreateSubscription from './CreateSubscription';
 import UpdateCard from './UpdateCard';
 import _get from 'lodash/get';
 
+const stripe = Stripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY); // eslint-disable-line
+
 export default class Payments extends React.Component {
 	state = {
 		subscription: null,
@@ -55,8 +57,28 @@ export default class Payments extends React.Component {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
+            const subscription = _get(results, 'subscription');
+            const paymentIntentStatus = _get(subscription, 'latest_invoice.payment_intent.status', '');
+            const client_secret = _get(subscription, 'latest_invoice.payment_intent.client_secret', '');
+            if (paymentIntentStatus === 'requires_action' || paymentIntentStatus ===  'requires_payment_method') {
+                stripe.confirmCardPayment(client_secret).then(function(result) {
+                    console.log('confirmCardPayment result', result);
+                    if (result.error) {
+                        // Display error message in your UI.
+                        // The card was declined (i.e. insufficient funds, card has expired, etc)
+                        alert(result.error);
+
+                    } else {
+                        // Show a success message to your customer
+                        alert('You have successfully confirmed the payment');
+                        window.location.href = '/payments';
+                    }
+
+
+                });
+            }
+
             // this.getPaymentDetails();
-            window.location.href = '/payments';
 			
 		}).catch((error) => {
 			console.log('error ', error);
