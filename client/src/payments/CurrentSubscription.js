@@ -21,6 +21,7 @@ export default class CurrentSubscription extends React.Component {
         const nickname = subscription.plan.nickname;
         const amount = subscription.plan.amount;
         const interval = subscription.plan.interval;
+        const status = subscription.status;
         
 
         return (
@@ -28,6 +29,8 @@ export default class CurrentSubscription extends React.Component {
                 <Card.Body>
                     <h4>Subscription details</h4>
                     <div>
+                        <div>Status</div>
+                        <p>{status}</p>
                         <div>You are subscribed to</div>
                         <p>{nickname}</p>
                         <div>We will charge you</div>
