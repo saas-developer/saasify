@@ -163,12 +163,16 @@ exports.login = async (req, res, next) => {
 			res.status(401).send(info);
 			return;			
 		}
-
-        if (!user.activated) {
-            res.status(403).send({
+        const errorObject = {
+            error: true,
+            errors: [{
                 code: 'GLOBAL_ERROR',
                 message: 'Account is not activated.'
-            })
+            }]
+        };
+
+        if (!user.activated) {
+            res.status(403).send(errorObject)
             return;
         }
 		
@@ -365,7 +369,13 @@ exports.resetPassword = async (req, res, next) => {
 	}
 
 	if (validationErrors.length) {
-		return res.status(422).send(validationErrors);
+        const errorObject = {
+            error: true,
+            errors: validationErrors
+        };
+
+        res.status(422).send(errorObject);
+		return res.status(422).send(errorObject);
 	}
 
 	try {
@@ -374,7 +384,15 @@ exports.resetPassword = async (req, res, next) => {
 		});
 
 		if (!user) {
-			// Ignore ..
+			const errorObject = {
+                error: true,
+                errors: [{
+                    code: 'GLOBAL_ERROR',
+                    message: 'Sorry, we could not update your password'
+                }]
+            };
+
+            return res.status(422).send(errorObject);
 		}
 
 		if (user) {

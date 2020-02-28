@@ -19,7 +19,7 @@ export default class CreateSubscription extends React.Component {
             user
         } = this.props;
 
-        const hasSubscription = _get(user, 'stripeDetails.subscription.status', '') == 'active';
+        const hasSubscription = _get(user, 'stripeDetails.subscription.status', '') === 'active';
 
         return (
             <Card className="mb-4">
