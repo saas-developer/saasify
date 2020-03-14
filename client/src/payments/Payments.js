@@ -1,7 +1,6 @@
 import React from 'react';
 import CurrentSubscription from './CurrentSubscription';
 import CurrentCard from './CurrentCard';
-import StripeProviderComponent from './StripeProviderComponent';
 import CreateSubscription from './CreateSubscription';
 import UpdateCard from './UpdateCard';
 import _get from 'lodash/get';
