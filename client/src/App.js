@@ -13,9 +13,18 @@ import Logout from './account/Logout';
 import Header from './header/Header'
 import Payments from './payments/Payments';
 import { NotificationContainer } from 'react-notifications';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchLoggedInUser } from './account/actionsAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-notifications/dist/react-notifications.css';
 import './App.scss';
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    fetchLoggedInUser
+  }, dispatch);
+};
 
 class App extends React.Component {
   state = {
@@ -23,32 +32,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-	const url = '/api/logged-in-user';
-
-	fetch(url, {
-	  headers: {
-		'Accept': 'application/json',
-		'Content-Type': 'application/json'
-	  },
-	  credentials: 'same-origin',
-	  method: 'GET'
-	}).then((response) => {
-	  if (!response.ok) {
-		return response.json().then(err => { throw err })
-	  }
-	  return response.json();
-	}).then((results) => {
-	  console.log('results ', results);
-	  const user = results.user;
-
-	  this.setState({
-		user
-	  })
-
-	  
-	}).catch((error) => {
-	  console.log('error ', error);
-	})
+    this.props.fetchLoggedInUser();
   }
 
   render() {
@@ -78,4 +62,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(null, mapDispatchToProps)(App);
