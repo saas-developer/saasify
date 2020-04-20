@@ -1,0 +1,28 @@
+{
+  "name": "saas",
+  "version": "1.0.0",
+  "description": "SAASiFy is a sample SAAS app built with NodeJS and ReactJS. It is primarily built for the Udemy course [SaasiFy - Build a complete SAAS App this weekend](https://www.udemy.com/course/2786970).",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && npm start",
+    "heroku-postbuild": "cd client/ && npm install && npm run build && cd ../server && npm install"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules",
+    "server/node_modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saas-developer/saas-starter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saas-developer/saas-starter/issues"
+  },
+  "homepage": "https://github.com/saas-developer/saas-starter#readme",
+  "engines" : { 
+    "node" : "12.16.1" 
+  }
+}
