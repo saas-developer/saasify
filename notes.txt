@@ -1,0 +1,14 @@
+1. Keep first Stripe setup video as it is.
+
+2. Start by
+  1. updating it to functional component
+  2. Passing user to the route
+
+
+3. Go to the fixed price document
+  1. Explain Products vs Prices
+
+4. Previously I created customer with paymentMethodId also
+Now createCustomer and attachPaymentMethodID are two steps
+
+5. 

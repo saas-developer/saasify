@@ -8,6 +8,14 @@ const {
   sendResetPasswordLinkEmail
 } = require('../lib/EmailManager');
 
+exports.getLoggedInUser = async (req, res, next) => {
+  const user = User.toClientObject(req.user);
+
+  res.send({
+	user
+  })
+}
+
 exports.register = async (req, res, next) => {
 	const {
 		email,
