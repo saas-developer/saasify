@@ -2,7 +2,7 @@ import React from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import CardSection from './CardSection';
 
-export default function CheckoutForm() {
+export default function CheckoutForm(props) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -45,6 +45,7 @@ export default function CheckoutForm() {
         //   // Create the subscription
         //   createSubscription({ customerId, paymentMethodId, priceId });
         // }
+        props.createSubscription(paymentMethod);
       }
     };
 

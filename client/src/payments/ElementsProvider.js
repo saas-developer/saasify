@@ -8,10 +8,12 @@ import CheckoutForm from './CheckoutForm';
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe("pk_test_cPAYuvk1DKJ0cqm0cm0Zblms");
 
-export default function ElementsProvider() {
+export default function ElementsProvider(props) {
   return (
     <Elements stripe={stripePromise}>
-      <CheckoutForm />
+      <CheckoutForm
+      	createSubscription={props.createSubscription}
+      />
     </Elements>
   );
 };

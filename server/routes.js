@@ -1,4 +1,5 @@
 const authController = require('./controllers/authController');
+const paymentsController = require('./controllers/paymentsController');
 const passport = require('passport');
 const checkAuth = passport.authenticate('jwt', { session: false });
 
@@ -25,6 +26,9 @@ function addRoutes(app) {
 	app.post('/api/reset-password', authController.resetPassword);
 
 	app.get('/api/test-auth', checkAuth , authController.testAuth);
+
+	// Payments
+	app.post('/api/payments/subscriptions', checkAuth, paymentsController.createSubscription);
 
 
 }
