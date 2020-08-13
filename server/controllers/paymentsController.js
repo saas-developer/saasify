@@ -81,7 +81,15 @@ exports.createSubscription = async (req, res, next) => {
 
 }
 
+exports.getSubscription = async (req, res, next) => {
+	const user = req.user;
 
+	const subscription = user.stripeDetails && user.stripeDetails.subscription;
+
+	res.send({
+		subscription
+	})
+}
 
 
 
