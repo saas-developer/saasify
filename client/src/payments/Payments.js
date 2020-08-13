@@ -6,7 +6,8 @@ export default function Payments(props) {
 	const createSubscription = (paymentMethod, priceId) => {
 		const url = '/api/payments/subscriptions';
 		if (!priceId) {
-			priceId = 'price_1HDuQq2YRaHTwzmSI4AkVjbw';
+			// priceId = 'price_1HDuQq2YRaHTwzmSI4AkVjbw'; // Enterprise
+			priceId = 'price_1HDuQV2YRaHTwzmSVnVn5LXQ'; // Basic
 		}
 		
 		fetch(url, {

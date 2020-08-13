@@ -1,5 +1,12 @@
-
+const User = require('../models/User');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const {
+	createCustomer,
+	attachPaymentMethod,
+	setPaymentMethodAsDefault,
+	createSubscription,
+	updateSubscription
+} = require('../lib/stripeManager');
 
 exports.createSubscription = async (req, res, next) => {
 	const {
@@ -7,36 +14,55 @@ exports.createSubscription = async (req, res, next) => {
 		priceId
 	} = req.body;
 
-	const email = req.user.email;
+	const {
+		email,
+		id: userId,
+		stripeDetails
+	} = req.user;
 	let subscription;
+	let customer;
+	let user = req.user;
 
 	try {
-		// Step 1 : Create a customer
-		const customer = await stripe.customers.create({
-		    email
-		});
+
+		if (stripeDetails && stripeDetails.customer) {
+			customer = stripeDetails.customer;
+		} else {
+			// Step 1 : Create a customer
+			customer = await createCustomer(email);
+			// Save the customer to database
+			user = await User.saveStripeCustomer(userId, customer);
+		}
 
 		// Attach payment method to customer
-		await stripe.paymentMethods.attach(req.body.paymentMethod.id, {
-	      customer: customer.id,
-	    });
+	    await attachPaymentMethod(req.body.paymentMethod.id, customer);
 
 	    // Make that payment method the default
-	    await stripe.customers.update(
-		    customer.id,
-		    {
-		      invoice_settings: {
-		        default_payment_method: req.body.paymentMethod.id,
-		      },
-		    }
-		);
+		await setPaymentMethodAsDefault(req.body.paymentMethod.id, customer);
 
-		// Step 2: Create a subscription
-		subscription = await stripe.subscriptions.create({
-		    customer: customer.id,
-		    items: [{ price: priceId }],
-		    expand: ['latest_invoice.payment_intent'],
-	    });
+		if (stripeDetails && stripeDetails.subscription) {
+			subscription = stripeDetails.subscription;
+
+			const updatedSubscription = await updateSubscription(subscription, priceId);
+			
+			res.send({
+				subscription: updatedSubscription
+			});
+			return;
+
+		} else {
+			// Step 2: Create a subscription
+			subscription = await createSubscription(customer, priceId);
+			
+			await User.saveStripeSubscription(userId, subscription);
+
+		    res.send({
+		    	subscription
+		    });
+		    return;
+		}
+
+		
 	} catch (e) {
 		console.log(e);
 		const validationErrors = [{
@@ -53,10 +79,6 @@ exports.createSubscription = async (req, res, next) => {
 		return;
 	}
 
-	
-    res.send({
-    	subscription
-    });
 }
 
 

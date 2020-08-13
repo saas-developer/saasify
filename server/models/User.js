@@ -18,7 +18,10 @@ if (!User) {
 
 		// Fields related to reset password
 		resetPasswordToken: { type: String, unique: true, sparse: true },
-		resetPasswordTokenSentAt: { type: Date }
+		resetPasswordTokenSentAt: { type: Date },
+
+		// Payments related
+		stripeDetails: {}
 	},
 	{
 		timestamps: true
@@ -70,12 +73,32 @@ if (!User) {
 			_id: userObject._id,
 			email: userObject.email,
 			activated: userObject.activated,
+			stripeDetails: userObject.stripeDetails,
 			createdAt: userObject.createdAt,
 			updatedAt: userObject.updatedAt,
 		};
 
 		return clientObject;
 	}
+
+	userSchema.statics.saveStripeCustomer = async function(id, customer) {
+		const updatedUser = await this.findOneAndUpdate(
+			{ _id: id },
+			{ 'stripeDetails.customer': customer },
+			{ new: true }
+		);
+		return updatedUser;
+	}
+
+	userSchema.statics.saveStripeSubscription = async function(id, subscription) {
+		const updatedUser = await this.findOneAndUpdate(
+			{ _id: id },
+			{ 'stripeDetails.subscription': subscription },
+			{ new: true }
+		);
+		return updatedUser;
+	}
+
 
 	User = mongoose.model('User', userSchema);	
 }
