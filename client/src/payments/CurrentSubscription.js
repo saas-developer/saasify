@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function Payments(props) {
+export default function CurrentSubscription(props) {
 	const {
 		subscription,
 		prices
