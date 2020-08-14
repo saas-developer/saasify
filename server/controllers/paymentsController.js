@@ -5,7 +5,8 @@ const {
 	attachPaymentMethod,
 	setPaymentMethodAsDefault,
 	createSubscription,
-	updateSubscription
+	updateSubscription,
+	getPaymentMethod
 } = require('../lib/stripeManager');
 
 exports.createSubscription = async (req, res, next) => {
@@ -30,15 +31,18 @@ exports.createSubscription = async (req, res, next) => {
 		} else {
 			// Step 1 : Create a customer
 			customer = await createCustomer(email);
+
+			// Attach payment method to customer
+		    await attachPaymentMethod(req.body.paymentMethod.id, customer);
+
+		    // Make that payment method the default
+			customer = await setPaymentMethodAsDefault(req.body.paymentMethod.id, customer);
+
 			// Save the customer to database
 			user = await User.saveStripeCustomer(userId, customer);
 		}
 
-		// Attach payment method to customer
-	    await attachPaymentMethod(req.body.paymentMethod.id, customer);
-
-	    // Make that payment method the default
-		await setPaymentMethodAsDefault(req.body.paymentMethod.id, customer);
+		
 
 		if (stripeDetails && stripeDetails.subscription) {
 			subscription = stripeDetails.subscription;
@@ -88,6 +92,19 @@ exports.getSubscription = async (req, res, next) => {
 
 	res.send({
 		subscription
+	})
+}
+
+exports.getCard = async (req, res, next) => {
+	const user = req.user;
+
+	const customer = user.stripeDetails && user.stripeDetails.customer;
+	const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+
+	const paymentMethod = await getPaymentMethod(defaultPaymentMethodId);
+
+	res.send({
+		card: paymentMethod.card
 	})
 }
 

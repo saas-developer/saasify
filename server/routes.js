@@ -31,6 +31,8 @@ function addRoutes(app) {
 	app.post('/api/payments/subscriptions', checkAuth, paymentsController.createSubscription);
 	app.get('/api/payments/subscriptions', checkAuth, paymentsController.getSubscription);
 
+	app.get('/api/payments/cards', checkAuth, paymentsController.getCard);
+
 
 }
 

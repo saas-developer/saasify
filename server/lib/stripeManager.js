@@ -17,7 +17,7 @@ exports.attachPaymentMethod = async (paymentMethodId, customer) => {
 }
 
 exports.setPaymentMethodAsDefault = async (paymentMethodId, customer) => {
-    await stripe.customers.update(
+    const newCustomer = await stripe.customers.update(
 	    customer.id,
 	    {
 	      invoice_settings: {
@@ -25,6 +25,13 @@ exports.setPaymentMethodAsDefault = async (paymentMethodId, customer) => {
 	      },
 	    }
 	);
+
+	return newCustomer;
+}
+
+exports.getPaymentMethod = async (paymentMethodId) => {
+	const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+	return paymentMethod;
 }
 
 exports.createSubscription = async (customer, priceId) => {
