@@ -48,6 +48,8 @@ exports.createSubscription = async (req, res, next) => {
 			subscription = stripeDetails.subscription;
 
 			const updatedSubscription = await updateSubscription(subscription, priceId);
+
+			await User.saveStripeSubscription(userId, updatedSubscription);
 			
 			res.send({
 				subscription: updatedSubscription

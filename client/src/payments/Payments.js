@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import ElementsProvider from './ElementsProvider';
 import CurrentSubscription from './CurrentSubscription';
+import CreateSubscription from './CreateSubscription';
 import CurrentCard from './CurrentCard';
 import { prices } from './productsAndPrices';
 
 export default function Payments(props) {
 	console.log('props ', props);
 	useEffect(() => {
-		getSubscription();
-		getCard();
+		getPaymentDetails();
 	}, []);
+
+	const getPaymentDetails =() => {
+		getSubscription();
+		getCard();		
+	}
 	const [subscription, setSubscription] = useState(null);
 	const [card, setCard] = useState(null);
 
@@ -38,8 +42,10 @@ export default function Payments(props) {
 			return response.json();
 		}).then((results) => {
 			console.log('results ', results);
+			getPaymentDetails();
 		}).catch((error) => {
 			console.log('error ', error);
+			getPaymentDetails();
 		})
 	}
 
@@ -107,9 +113,12 @@ export default function Payments(props) {
 					card={card}
 				/>
 
-				<ElementsProvider
+				<CreateSubscription
 					createSubscription={createSubscription}
+					subscription={subscription}
 				/>
+
+				
 			</div>
 		</div>
 	);
