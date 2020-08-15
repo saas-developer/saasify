@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Card } from 'react-bootstrap';
 
 export default function CurrentCard(props) {
 	const {
@@ -20,19 +21,24 @@ export default function CurrentCard(props) {
 
 
 	return (
-		<div>
-			<div>Card Brand</div>
-			<div>{brand}</div>
+		<Card>
+			<Card.Body>
+				<h4>Card Details</h4>
+				<div>
+					<div>Card Brand</div>
+					<p>{brand}</p>
 
-			<div>Exp Month</div>
-			<div>{exp_month}</div>
+					<div>Exp Month</div>
+					<p>{exp_month}</p>
 
-			<div>Exp Year</div>
-			<div>{exp_year}</div>
+					<div>Exp Year</div>
+					<p>{exp_year}</p>
 
-			<div>Last4</div>
-			<div>{last4}</div>
+					<div>Last4</div>
+					<p>{last4}</p>
 
-		</div>
+				</div>
+			</Card.Body>
+		</Card>
 	)
 }

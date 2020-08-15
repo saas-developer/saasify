@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Card } from 'react-bootstrap';
 
 export default function CurrentSubscription(props) {
 	const {
@@ -17,16 +18,21 @@ export default function CurrentSubscription(props) {
 	}
 
 	return (
-		<div>
-			Subscription ID
-			<div>{subscription.id}</div>
+		<Card>
+			<Card.Body>
+				<h4>Subscription Details</h4>
+				<div>
+					Subscription ID
+					<p>{subscription.id}</p>
 
-			<div>Amount</div>
-			<div>{(subscription.plan.amount / 100).toFixed(2)} {subscription.plan.currency.toUpperCase()}</div>
+					<div>Amount</div>
+					<p>{(subscription.plan.amount / 100).toFixed(2)} {subscription.plan.currency.toUpperCase()}</p>
 
-			<div>Plan Name</div>
-			<div>{getPlanName(subscription.plan.id)}</div>
+					<div>Plan Name</div>
+					<p>{getPlanName(subscription.plan.id)}</p>
 
-		</div>
+				</div>
+			</Card.Body>
+		</Card>
 	)
 }
