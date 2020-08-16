@@ -7,7 +7,10 @@ import _get from 'lodash/get';
 
 export default function CreateSubscription(props) {
 	const priceIds = _keys(prices);
-	const subscription = props.subscription;
+	const {
+		subscription,
+		card
+	} = props;
 	const currentPriceId = _get(subscription, 'plan.id', '');
 	const [priceId, setPriceId] = useState(currentPriceId);
 
@@ -44,9 +47,18 @@ export default function CreateSubscription(props) {
 					    </Form.Control>
 					  </Form.Group>
 
-					  <ElementsProvider
-					  	createSubscription={handleCreateSubscription}
-					  />
+					  {
+					  	!card && <ElementsProvider
+					  		createSubscription={handleCreateSubscription}
+					  	/>
+					  }
+
+					  {
+					  	card && <button
+					  		onClick={() => handleCreateSubscription(null)}
+					  	>Confirm order</button>
+					  }
+					  
 				</div>
 			</Card.Body>
 		</Card>

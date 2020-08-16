@@ -8,6 +8,7 @@ const {
 	updateSubscription,
 	getPaymentMethod
 } = require('../lib/stripeManager');
+const _ = require('lodash');
 
 exports.createSubscription = async (req, res, next) => {
 	const {
@@ -23,8 +24,21 @@ exports.createSubscription = async (req, res, next) => {
 	let subscription;
 	let customer;
 	let user = req.user;
+	let paymentMethodId = _.get(paymentMethod, 'id');
 
 	try {
+
+		if (!paymentMethodId) {
+			paymentMethodId = _.get(stripeDetails, 'customer.invoice_settings.default_payment_method');
+
+			if (!paymentMethodId) {
+				// This is an error
+				res.status(422).send({
+					message: 'No payment method available for this user'
+				});
+				return;
+			}
+		}
 
 		if (stripeDetails && stripeDetails.customer) {
 			customer = stripeDetails.customer;
@@ -33,10 +47,10 @@ exports.createSubscription = async (req, res, next) => {
 			customer = await createCustomer(email);
 
 			// Attach payment method to customer
-		    await attachPaymentMethod(req.body.paymentMethod.id, customer);
+		    await attachPaymentMethod(paymentMethodId, customer);
 
 		    // Make that payment method the default
-			customer = await setPaymentMethodAsDefault(req.body.paymentMethod.id, customer);
+			customer = await setPaymentMethodAsDefault(paymentMethodId, customer);
 
 			// Save the customer to database
 			user = await User.saveStripeCustomer(userId, customer);

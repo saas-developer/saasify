@@ -17,12 +17,8 @@ export default function Payments(props) {
 	const [subscription, setSubscription] = useState(null);
 	const [card, setCard] = useState(null);
 
-	const createSubscription = (paymentMethod, priceId) => {
+	const createSubscription = (paymentMethod = null, priceId) => {
 		const url = '/api/payments/subscriptions';
-		if (!priceId) {
-			// priceId = 'price_1HDuQq2YRaHTwzmSI4AkVjbw'; // Enterprise
-			priceId = 'price_1HDuQV2YRaHTwzmSVnVn5LXQ'; // Basic
-		}
 		
 		fetch(url, {
 			headers: {
@@ -116,6 +112,7 @@ export default function Payments(props) {
 				<CreateSubscription
 					createSubscription={createSubscription}
 					subscription={subscription}
+					card={card}
 				/>
 
 				
