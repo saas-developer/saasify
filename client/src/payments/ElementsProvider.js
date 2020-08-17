@@ -12,7 +12,7 @@ export default function ElementsProvider(props) {
   return (
     <Elements stripe={stripePromise}>
       <CheckoutForm
-      	createSubscription={props.createSubscription}
+      	onPaymentMethodCreated={props.onPaymentMethodCreated}
       />
     </Elements>
   );

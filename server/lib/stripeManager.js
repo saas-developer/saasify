@@ -55,3 +55,8 @@ exports.updateSubscription = async (subscription, priceId) => {
 	);
 	return updatedSubscription;
 }
+
+exports.cancelSubscription = async (subscriptionId) => {
+	const deletedSubscription = await stripe.subscriptions.del(subscriptionId);
+	return deletedSubscription;
+}

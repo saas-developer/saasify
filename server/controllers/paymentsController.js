@@ -6,7 +6,8 @@ const {
 	setPaymentMethodAsDefault,
 	createSubscription,
 	updateSubscription,
-	getPaymentMethod
+	getPaymentMethod,
+	cancelSubscription
 } = require('../lib/stripeManager');
 const _ = require('lodash');
 
@@ -114,13 +115,87 @@ exports.getSubscription = async (req, res, next) => {
 exports.getCard = async (req, res, next) => {
 	const user = req.user;
 
-	const customer = user.stripeDetails && user.stripeDetails.customer;
-	const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
-
-	const paymentMethod = await getPaymentMethod(defaultPaymentMethodId);
+	const defaultPaymentMethodId = _.get(req.user, 'stripeDetails.customer.invoice_settings.default_payment_method');
+	
+	let paymentMethod;
+	if (defaultPaymentMethodId) {
+		paymentMethod = await getPaymentMethod(defaultPaymentMethodId);
+	}
 
 	res.send({
-		card: paymentMethod.card
+		card: _.get(paymentMethod, 'card', null)
+	})
+}
+
+exports.updateCard = async (req, res, next) => {
+	const {
+		paymentMethod
+	} = req.body;
+
+	let user = req.user;
+	let userId = user.id;
+	let stripeDetails = user.stripeDetails;
+	let customer = stripeDetails && stripeDetails.customer;
+
+	if (!customer || !paymentMethod) {
+		res.status(422).send({
+			message: 'A payment method and a customer object is required'
+		});
+		return;
+	}
+
+	let paymentMethodId = _.get(paymentMethod, 'id');
+
+	try {
+		// Attach payment method to customer
+	    await attachPaymentMethod(paymentMethodId, customer);
+
+	    // Make that payment method the default
+		customer = await setPaymentMethodAsDefault(paymentMethodId, customer);
+
+		// Save the customer to database
+		user = await User.saveStripeCustomer(userId, customer);
+
+		res.send({
+			customer
+		})
+	} catch (e) {
+		res.status(500).send({
+			code: 'GLOBAL_ERROR',
+			field: '',
+			message: 'An error occurred while updating your card'
+		})
+	}
+
+
+}
+
+exports.deleteSubscription = async (req, res, next) => {
+	const user = req.user;
+	const subscriptionId = _.get(user, 'stripeDetails.subscription.id');
+
+	if (!subscriptionId) {
+		res.status(422).send({
+			message: 'You do not have any active subscription'
+		});
+		return;
+	}
+
+	let deletedSubsctiption;
+	try {
+		deletedSubsctiption = await cancelSubscription(subscriptionId);
+		await User.saveStripeSubscription(user.id, null);
+	} catch (e) {
+		res.status(500).send({
+			code: 'GLOBAL_ERROR',
+			field: '',
+			message: 'An error occurred while deleting your subscription'
+		})
+	}
+
+
+	res.send({
+		subscription: deletedSubsctiption
 	})
 }
 

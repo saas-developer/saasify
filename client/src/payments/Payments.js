@@ -3,6 +3,7 @@ import CurrentSubscription from './CurrentSubscription';
 import CreateSubscription from './CreateSubscription';
 import CurrentCard from './CurrentCard';
 import { prices } from './productsAndPrices';
+import UpdateCard from './UpdateCard';
 
 export default function Payments(props) {
 	console.log('props ', props);
@@ -31,6 +32,57 @@ export default function Payments(props) {
 				paymentMethod,
 				priceId 
 			})
+		}).then((response) => {
+			if (!response.ok) {
+				return response.json().then(err => { throw err })
+			}
+			return response.json();
+		}).then((results) => {
+			console.log('results ', results);
+			getPaymentDetails();
+		}).catch((error) => {
+			console.log('error ', error);
+			getPaymentDetails();
+		})
+	}
+
+	const updateCard = (paymentMethod) => {
+		const url = '/api/payments/cards';
+		
+		fetch(url, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			method: 'POST',
+			body: JSON.stringify({
+				paymentMethod
+			})
+		}).then((response) => {
+			if (!response.ok) {
+				return response.json().then(err => { throw err })
+			}
+			return response.json();
+		}).then((results) => {
+			console.log('results ', results);
+			getPaymentDetails();
+		}).catch((error) => {
+			console.log('error ', error);
+			getPaymentDetails();
+		})
+	}
+
+	const deleteSubscription = () => {
+		const url = '/api/payments/subscriptions';
+		
+		fetch(url, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			method: 'DELETE'
 		}).then((response) => {
 			if (!response.ok) {
 				return response.json().then(err => { throw err })
@@ -102,6 +154,7 @@ export default function Payments(props) {
 
 				<CurrentSubscription
 					subscription={subscription}
+					deleteSubscription={deleteSubscription}
 					prices={prices}
 				/>
 
@@ -109,8 +162,13 @@ export default function Payments(props) {
 					card={card}
 				/>
 
+				<UpdateCard
+					card={card}
+					onPaymentMethodCreated={updateCard}
+				/>
+
 				<CreateSubscription
-					createSubscription={createSubscription}
+					onPaymentMethodCreated={createSubscription}
 					subscription={subscription}
 					card={card}
 				/>

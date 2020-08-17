@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 
 export default function CurrentSubscription(props) {
 	const {
@@ -9,7 +9,11 @@ export default function CurrentSubscription(props) {
 
 	if (!subscription) {
 		return (
-			<div>You do not have any subscriptions yet</div>
+			<Card>
+				<Card.Body>
+					<div>You do not have any subscriptions yet</div>
+				</Card.Body>
+			</Card>
 		)	
 	}
 
@@ -32,6 +36,12 @@ export default function CurrentSubscription(props) {
 					<p>{getPlanName(subscription.plan.id)}</p>
 
 				</div>
+				<Button
+					onClick={props.deleteSubscription}
+					variant="danger"
+				>
+					Delete Subscription
+				</Button>
 			</Card.Body>
 		</Card>
 	)

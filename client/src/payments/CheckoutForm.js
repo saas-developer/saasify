@@ -45,7 +45,7 @@ export default function CheckoutForm(props) {
         //   // Create the subscription
         //   createSubscription({ customerId, paymentMethodId, priceId });
         // }
-        props.createSubscription(paymentMethod);
+        props.onPaymentMethodCreated(paymentMethod);
       }
     };
 

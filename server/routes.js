@@ -30,8 +30,10 @@ function addRoutes(app) {
 	// Payments
 	app.post('/api/payments/subscriptions', checkAuth, paymentsController.createSubscription);
 	app.get('/api/payments/subscriptions', checkAuth, paymentsController.getSubscription);
+	app.delete('/api/payments/subscriptions', checkAuth, paymentsController.deleteSubscription);
 
 	app.get('/api/payments/cards', checkAuth, paymentsController.getCard);
+	app.post('/api/payments/cards', checkAuth, paymentsController.updateCard);
 
 
 }
