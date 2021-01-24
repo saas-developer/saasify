@@ -20,7 +20,7 @@ export default function CreateSubscription(props) {
 
 	const handleCreateSubscription = (paymentMethod) => {
 		console.log('priceId', priceId)
-		props.createSubscription(paymentMethod, priceId);
+		props.onPaymentMethodCreated(paymentMethod, priceId);
 	}
 
 	const handlePriceChange = (newPriceId) => {
