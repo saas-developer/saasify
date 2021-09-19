@@ -49,7 +49,7 @@ export default function CreateSubscription(props) {
 
 					  {
 					  	!card && <ElementsProvider
-					  		createSubscription={handleCreateSubscription}
+					  		onPaymentMethodCreated={handleCreateSubscription}
 					  	/>
 					  }
 

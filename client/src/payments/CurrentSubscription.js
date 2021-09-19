@@ -30,10 +30,16 @@ export default function CurrentSubscription(props) {
 					<p>{subscription.id}</p>
 
 					<div>Amount</div>
-					<p>{(subscription.plan.amount / 100).toFixed(2)} {subscription.plan.currency.toUpperCase()}</p>
+          {
+            subscription.plan &&
+					   <p>{(subscription.plan.amount / 100).toFixed(2)} {subscription.plan.currency.toUpperCase()}</p>
+          }
 
 					<div>Plan Name</div>
-					<p>{getPlanName(subscription.plan.id)}</p>
+          {
+            subscription.plan &&
+					   <p>{getPlanName(subscription.plan.id)}</p>
+          }
 
 				</div>
 				<Button
