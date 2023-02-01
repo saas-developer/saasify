@@ -19,7 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "mailgun-js": "^0.22.0",
-    "mongoose": "^5.7.12",
+    "mongoose": "^5.13.15",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
